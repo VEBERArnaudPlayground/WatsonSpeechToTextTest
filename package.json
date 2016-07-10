@@ -1,0 +1,32 @@
+{
+  "name": "watson-speech-to-text-test",
+  "version": "0.0.1-alpha1",
+  "description": "Watson Speech To Text Test",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VEBERArnaudPlayground/WatsonSpeechToTextTest.git"
+  },
+  "keywords": [
+    "speech",
+    "to",
+    "text"
+  ],
+  "author": "VEBERArnaud",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VEBERArnaudPlayground/WatsonSpeechToTextTest/issues"
+  },
+  "homepage": "https://github.com/VEBERArnaudPlayground/WatsonSpeechToTextTest#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "ejs": "^2.4.2",
+    "express": "^4.14.0",
+    "socket.io": "^1.4.8",
+    "watson-developer-cloud": "^1.12.0"
+  }
+}
