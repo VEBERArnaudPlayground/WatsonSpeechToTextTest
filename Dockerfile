@@ -2,7 +2,12 @@ FROM node:6.3.0-slim
 
 MAINTAINER VEBER Arnaud
 
-ENV APP_SOURCE /usr/src/ghost
+ENV APP_SOURCE /usr/src/app
+
+# apt dependencies
+RUN apt-get update \
+    && apt-get install -y libav-tools \
+    && rm -rf /var/lib/apt/lists/*
 
 # ghost source
 RUN mkdir -p $APP_SOURCE

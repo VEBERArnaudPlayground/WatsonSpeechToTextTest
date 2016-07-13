@@ -24,7 +24,6 @@
 			<div class="collapse navbar-collapse" id="navbar-top">
 
 				<ul class="nav navbar-nav">
-                    <li><a href="/sample">Sample</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
@@ -48,14 +47,12 @@
                     <h3 class="panel-title">Youtube Video Url</h3>
                 </div>
                 <div class="panel-body">
-                    <form action="/transcript/youtube" method="GET">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="url" placeholder="Vidéo URL">
-                            <span class="input-group-btn">
-                                <button class="btn btn-primary" type="submit">Transcript !</button>
-                            </span>
-                        </div>
-                    </form>
+                    <div class="input-group">
+                        <input id="youtube_input" type="text" class="form-control" name="url" placeholder="Vidéo URL">
+                        <span class="input-group-btn">
+                            <button id="youtube_submit" class="btn btn-primary" type="submit">Transcript !</button>
+                        </span>
+                    </div>
                 </div>
             </div>
 		</div>
@@ -63,5 +60,25 @@
 
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script>
+        var youtubeInput = document.getElementById('youtube_input');
+        document.getElementById('youtube_submit').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            var youtubeValue = youtubeInput.value;
+            if (youtubeValue.indexOf('youtube.com') > -1) {
+                // youtube.com url provided
+                var youtubeIds = /.*www\.youtube\.com\/watch?.*v=(.*)$/.exec(youtubeValue);
+            } else if (youtubeValue.indexOf('youtu.be') > -1) {
+                // youtu.be url provided
+                var youtubeIds = /.*youtu\.be\/(.*)/.exec(youtubeValue);
+            } else {
+                // assuming the user provided the video id
+                var youtubeIds = [null, youtubeValue];
+            }
+
+            window.location = '/youtube/' + youtubeIds[1];
+        }, false);
+    </script>
 </body>
 </html>

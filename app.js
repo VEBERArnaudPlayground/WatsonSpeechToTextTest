@@ -3,7 +3,8 @@
 var express = require('express'),
     app = express(),
     watson = require('watson-developer-cloud'),
-    fs = require('fs');
+    ytdl = require('ytdl-core'),
+    avconv = require('avconv');
 
 require('./config/express')(app);
 
@@ -20,20 +21,31 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
-app.get('/sample', function(req, res) {
-    var recognizeStream = speech_to_text.createRecognizeStream({ model: 'fr-FR_BroadbandModel' });
-    fs.createReadStream(__dirname + '/resources/brexit.wav').pipe(recognizeStream);
+app.get('/youtube/:id', function(req, res) {
+    var videoId = req.params.id;
+    res.render('youtube', {videoId : videoId});
+
+    // create youtube stream
+    var youtubeStream = ytdl('http://www.youtube.com/watch?v=' + videoId, {format: 'mp4'});
+
+    // create conv stream
+    var convStream = avconv(['-i', 'pipe:0', '-vn', '-f', 'wav', 'pipe:1']);
+
+    // create recognize stream
+    var recognizeStream = speech_to_text.createRecognizeStream({model: 'fr-FR_BroadbandModel'});
     recognizeStream.setEncoding('utf8');
+
+    // youtube to text
+    youtubeStream
+        .pipe(convStream)
+        .pipe(recognizeStream);
+
+    // speech to text events
     recognizeStream.on('readable', function() {
         io.emit('stream_readable', {text: recognizeStream.read()});
     });
-    recognizeStream.on('end', function() {
-        io.emit('stream_end');
-    });
-
-    res.render('sample');
 });
 
 http.listen(3000, function(){
-      console.log('listening on *:3000');
+    console.log('listening on *:3000');
 });
